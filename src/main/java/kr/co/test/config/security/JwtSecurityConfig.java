@@ -103,12 +103,8 @@ public class JwtSecurityConfig {
 				.csrf().disable()
 
 				.formLogin().disable()
+				.logout().disable()
 
-				.logout()
-				.logoutUrl("/jwt/logout")
-				.logoutSuccessUrl(LOGIN_PAGE)
-
-				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

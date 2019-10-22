@@ -37,7 +37,7 @@ public class JwtAuthenticationWebFilter extends OncePerRequestFilter {
 		this.jwtTokenProvider = jwtTokenProvider;
 	}
 
-	private static final String LOGIN_PAGE = "/jwt/login?error=Y";
+	private static final String LOGIN_PAGE = "/jwt/login";
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -50,6 +50,7 @@ public class JwtAuthenticationWebFilter extends OncePerRequestFilter {
 
 		if ( StringUtils.isEmpty(sToken) ) {
 			response.sendRedirect(LOGIN_PAGE);
+			return;
 
 		} else {
 			AuthenticatedUser authUser = null;
@@ -58,10 +59,10 @@ public class JwtAuthenticationWebFilter extends OncePerRequestFilter {
 			switch ( jwtTokenProvider.isValidateJwtToken(sToken) ) {
 			case 0:
 				response.sendRedirect(LOGIN_PAGE);
-				break;
+				return;
 			case 2:
 				response.sendRedirect(LOGIN_PAGE);
-				break;
+				return;
 
 			default:
 				break;
@@ -82,6 +83,7 @@ public class JwtAuthenticationWebFilter extends OncePerRequestFilter {
 
 		if ( !StringUtils.isEmpty(result.getRes_cd()) ) {
 			response.sendRedirect(LOGIN_PAGE);
+			return;
 		} else {
 			filterChain.doFilter(request, response);
 		}

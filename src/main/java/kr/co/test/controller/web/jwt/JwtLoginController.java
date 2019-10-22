@@ -60,4 +60,14 @@ public class JwtLoginController extends LogDeclare {
 		return mav;
 	}
 
+	@RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView logout(ParamCollector paramCollector, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+
+		jwtLoginService.processLogout(response);
+
+		mav.setViewName("redirect:/jwt/login");
+		return mav;
+	}
+
 }
