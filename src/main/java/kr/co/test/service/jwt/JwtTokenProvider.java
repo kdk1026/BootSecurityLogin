@@ -97,6 +97,8 @@ public class JwtTokenProvider extends LogDeclare {
 	 		.setExpiration( this.getExpirationTime(jwtProp.getProperty("jwt.access.expire.minute")) );
 
 	 	builder.claim("name", user.getName());
+	 	builder.claim("last_pwd_upd_dt", user.getLast_pwd_upd_dt());
+	 	builder.claim("last_login_dt", user.getLast_login_dt());
 
 		List<String> listAuthority = new ArrayList<String>();
 		List<GrantedAuthority> authorities = (List<GrantedAuthority>) user.getAuthorities();
@@ -124,6 +126,8 @@ public class JwtTokenProvider extends LogDeclare {
 		.setExpiration( this.getExpirationTime(jwtProp.getProperty("jwt.refresh.expire.minute")) );
 
 	 	builder.claim("name", user.getName());
+	 	builder.claim("last_pwd_upd_dt", user.getLast_pwd_upd_dt());
+	 	builder.claim("last_login_dt", user.getLast_login_dt());
 
 		List<String> listAuthority = new ArrayList<String>();
 		List<GrantedAuthority> authorities = (List<GrantedAuthority>) user.getAuthorities();
@@ -162,7 +166,10 @@ public class JwtTokenProvider extends LogDeclare {
                 .getBody();
 
         AuthenticatedUser user = new AuthenticatedUser();
+        user.setId(claims.getId());
         user.setName(claims.get(JwtConstants.NAME).toString());
+        user.setLast_pwd_upd_dt(claims.get("last_pwd_upd_dt").toString());
+        user.setLast_login_dt(claims.get("last_login_dt").toString());
 
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         @SuppressWarnings("unchecked")

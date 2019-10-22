@@ -120,17 +120,7 @@ public class JwtSecurityConfig {
 
 				.and()
 				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.NEVER)
-				.invalidSessionUrl(LOGIN_PAGE+"?invalid")
-				.sessionFixation().none()
-				.maximumSessions(1)
-					.maxSessionsPreventsLogin(true);
-
-			http.rememberMe()
-				.rememberMeParameter("remember-me")
-				.key("steady")
-				.tokenValiditySeconds(24*60*60)	// 86400
-				.tokenRepository( this.persistentTokenRepository() );
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		}
 
 		@Bean
