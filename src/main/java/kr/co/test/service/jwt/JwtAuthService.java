@@ -38,6 +38,7 @@ public class JwtAuthService extends LogDeclare {
 	public ResultSetMap processAuthByUsername(ParamCollector paramCollector) {
 		ResultSetMap resMap = new ResultSetMap();
 
+		String sDeviceId = paramCollector.getHeardMap().getString("device_id");
 		String username = paramCollector.getString("username");
         String password = paramCollector.getString("password");
         // XXX : 비밀번호 구간 암호화 시, 복호화 처리
@@ -61,7 +62,7 @@ public class JwtAuthService extends LogDeclare {
     			return resMap;
         	}
 
-        	JwtToken jwtToken = jwtTokenProvider.generateToken(user);
+        	JwtToken jwtToken = jwtTokenProvider.generateToken(user, sDeviceId);
 
         	String sAccessToken = jwtToken.accessToken;
         	Date date = jwtTokenProvider.getExpirationFromJwt(sAccessToken);
@@ -86,6 +87,7 @@ public class JwtAuthService extends LogDeclare {
 	public ResultSetMap processRefresh(ParamCollector paramCollector) {
 		ResultSetMap resMap = new ResultSetMap();
 
+		String sDeviceId = paramCollector.getHeardMap().getString("device_id");
 		String sGrantType = paramCollector.getString("grant_type");
 		String sRefreshToken = paramCollector.getString("refresh_token");
 
@@ -119,7 +121,7 @@ public class JwtAuthService extends LogDeclare {
 				// 4. 토큰 갱신
 				// 4.1. Access 토큰 갱신
 				JwtToken jwtToken = new JwtToken();
-	        	jwtToken.accessToken = jwtTokenProvider.generateAccessToken(user);
+	        	jwtToken.accessToken = jwtTokenProvider.generateAccessToken(user, sDeviceId);
 
 	        	Date date = jwtTokenProvider.getExpirationFromJwt(sRefreshToken);
 
@@ -133,7 +135,7 @@ public class JwtAuthService extends LogDeclare {
 
 				if (nGap >= -7 && nGap <= 0) {
 					// 4.2.1. 충족 시, Refresh 토큰 갱신 응답
-					jwtToken.refreshToken = jwtTokenProvider.generateRefreshToken(user);
+					jwtToken.refreshToken = jwtTokenProvider.generateRefreshToken(user, sDeviceId);
 					resMap.put("refresh_token", jwtToken.refreshToken);
 				} else {
 					// 4.2.2. 미충족 시, 파라미터 응답
