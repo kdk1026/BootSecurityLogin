@@ -9,15 +9,25 @@ import common.LogDeclare;
 import common.util.map.ParamMap;
 import common.util.map.ResultSetMap;
 import kr.co.test.config.mvc.resolver.ParamCollector;
-import kr.co.test.service.jwt.JwtAuthService;
+import kr.co.test.service.jwt.RestJwtAuthService;
 import kr.co.test.service.session.RestSessionConfirmService;
 
+/**
+ * <pre>
+ * 개정이력
+ * -----------------------------------
+ * 2019. 10. 22. 김대광	최초작성
+ * </pre>
+ *
+ *
+ * @author 김대광
+ */
 @RestController
 @RequestMapping("/api/jwt/login")
 public class RestJwtAuthController extends LogDeclare {
 
 	@Autowired
-	private JwtAuthService jwtAuthService;
+	private RestJwtAuthService jwtAuthService;
 
 	@Autowired
 	private RestSessionConfirmService restSessionConfirmService;

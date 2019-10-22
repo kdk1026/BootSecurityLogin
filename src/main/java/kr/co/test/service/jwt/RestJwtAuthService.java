@@ -20,8 +20,18 @@ import kr.co.test.common.security.web.service.UserService;
 import kr.co.test.config.mvc.resolver.ParamCollector;
 import kr.co.test.service.jwt.JwtTokenProvider.JwtToken;
 
+/**
+ * <pre>
+ * 개정이력
+ * -----------------------------------
+ * 2019. 10. 22. 김대광	최초작성
+ * </pre>
+ *
+ *
+ * @author 김대광
+ */
 @Service
-public class JwtAuthService extends LogDeclare {
+public class RestJwtAuthService extends LogDeclare {
 
 	@Autowired
 	private UserService userService;

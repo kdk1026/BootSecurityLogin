@@ -26,6 +26,16 @@ import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import kr.co.test.common.security.web.model.AuthenticatedUser;
 
+/**
+ * <pre>
+ * 개정이력
+ * -----------------------------------
+ * 2019. 10. 22. 김대광	최초작성
+ * </pre>
+ *
+ *
+ * @author 김대광
+ */
 @Component
 public class JwtTokenProvider extends LogDeclare {
 

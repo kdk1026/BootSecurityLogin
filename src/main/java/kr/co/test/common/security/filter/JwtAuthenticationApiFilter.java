@@ -21,11 +21,21 @@ import kr.co.test.common.security.web.model.AuthenticatedUser;
 import kr.co.test.model.ResultVo;
 import kr.co.test.service.jwt.JwtTokenProvider;
 
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+/**
+ * <pre>
+ * 개정이력
+ * -----------------------------------
+ * 2019. 10. 22. 김대광	최초작성
+ * </pre>
+ *
+ *
+ * @author 김대광
+ */
+public class JwtAuthenticationApiFilter extends OncePerRequestFilter {
 
 	private JwtTokenProvider jwtTokenProvider;
 
-	public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
+	public JwtAuthenticationApiFilter(JwtTokenProvider jwtTokenProvider) {
 		this.jwtTokenProvider = jwtTokenProvider;
 	}
 

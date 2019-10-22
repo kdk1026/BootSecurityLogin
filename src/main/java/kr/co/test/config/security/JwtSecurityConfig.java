@@ -22,8 +22,8 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import kr.co.test.common.RestCorsConfig;
 import kr.co.test.common.security.UserAuthenticationProvider;
 import kr.co.test.common.security.entryPoint.RestUserAuthenticationEntryPoint;
-import kr.co.test.common.security.filter.JwtAuthenticationFilter;
-import kr.co.test.common.security.handler.LoginFailureHandler;
+import kr.co.test.common.security.filter.JwtAuthenticationApiFilter;
+import kr.co.test.common.security.filter.JwtAuthenticationWebFilter;
 import kr.co.test.common.security.handler.RestAccessDeniedHandler;
 import kr.co.test.service.jwt.JwtTokenProvider;
 
@@ -34,10 +34,7 @@ import kr.co.test.service.jwt.JwtTokenProvider;
  * 2019. 10. 22. 김대광	최초작성
  * </pre>
  *
- * <pre>
- * Spring 설정은 Scan 패키지 외에 있어도 동작하나 Security는 아님...
- * DataSource Bean 이름도 가져오기 못하므로 Scan 패키지에서 처리
- * </pre>
+ *
  * @author 김대광
  */
 @EnableWebSecurity
@@ -74,17 +71,17 @@ public class JwtSecurityConfig {
 		@Autowired @Qualifier("accountDataScource")
         private DataSource accountDataScource;
 
+		@Autowired
+		private JwtTokenProvider jwtTokenProvider;
+
 		@Override
 		public void configure(WebSecurity web) throws Exception {
 			web.ignoring()
-				.antMatchers("/mdb/**", "/js/**", "/webjars/**", "/console/**");
+				.antMatchers("/mdb/**", "/js/**", "/webjars/**", "/console/**", LOGIN_PAGE, LOGIN_URI);
 		}
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests()
-				.antMatchers("/**", LOGIN_PAGE).permitAll();
-
 			http.antMatcher("/jwt/**")
 				.authorizeRequests()
 				.anyRequest().authenticated()
@@ -103,17 +100,10 @@ public class JwtSecurityConfig {
 				.xssProtection().block(false)
 
 				.and().and()
-				.csrf()
+				.csrf().disable()
 
-				.and()
-				.formLogin()
-				.loginPage(LOGIN_PAGE)
-				.loginProcessingUrl(LOGIN_URI)
-				.defaultSuccessUrl("/jwt/main")
-				.usernameParameter("id").passwordParameter("pw")
-				.failureHandler(new LoginFailureHandler("/jwt/login?error"))
+				.formLogin().disable()
 
-				.and()
 				.logout()
 				.logoutUrl("/jwt/logout")
 				.logoutSuccessUrl(LOGIN_PAGE)
@@ -121,6 +111,10 @@ public class JwtSecurityConfig {
 				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+			JwtAuthenticationWebFilter jwtAuthFilter = new JwtAuthenticationWebFilter(jwtTokenProvider);
+
+			http.addFilterBefore( jwtAuthFilter, UsernamePasswordAuthenticationFilter.class );
 		}
 
 		@Bean
@@ -188,7 +182,7 @@ public class JwtSecurityConfig {
 				.and()
 				.cors().configurationSource(RestCorsConfig.configurationSource());
 
-				JwtAuthenticationFilter jwtAuthFilter = new JwtAuthenticationFilter(jwtTokenProvider);
+				JwtAuthenticationApiFilter jwtAuthFilter = new JwtAuthenticationApiFilter(jwtTokenProvider);
 
 				http.addFilterBefore( jwtAuthFilter, UsernamePasswordAuthenticationFilter.class );
 		}
