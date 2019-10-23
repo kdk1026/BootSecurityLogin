@@ -10,11 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import common.LogDeclare;
 import common.ResponseCodeEnum;
 import common.util.date.Jsr310DateUtil;
 import common.util.map.ResultSetMap;
 import kr.co.test.common.Constants;
+import kr.co.test.common.mvc.service.CommonService;
 import kr.co.test.common.security.web.model.AuthenticatedUser;
 import kr.co.test.common.security.web.service.UserService;
 import kr.co.test.config.mvc.resolver.ParamCollector;
@@ -31,7 +31,7 @@ import kr.co.test.service.jwt.JwtTokenProvider.JwtToken;
  * @author 김대광
  */
 @Service
-public class RestJwtAuthService extends LogDeclare {
+public class RestJwtAuthService extends CommonService {
 
 	@Autowired
 	private UserService userService;

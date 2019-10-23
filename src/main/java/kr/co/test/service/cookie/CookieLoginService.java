@@ -74,9 +74,6 @@ public class CookieLoginService extends CommonService {
 			return resultVo;
 		}
 
-		//--------------------------------------------------
-		// JWT 토큰 생성
-		//--------------------------------------------------
 		String sAutoLogin = "N";
 		if ( paramCollector.containsKey("login_chk") && "on".equals(paramCollector.getString("login_chk")) ) {
 			sAutoLogin = "Y";
@@ -97,7 +94,7 @@ public class CookieLoginService extends CommonService {
 		int nExpireSecond = Integer.parseInt(sSessionExpireSecond);
 
 		//--------------------------------------------------
-		// JWT 토큰 쿠키 생성
+		// 쿠키 생성
 		//--------------------------------------------------
 		CookieUtilVer2.addCookie(response, Constants.Auth.LOGIN_COOKIE, sEncryptedUser, nExpireSecond, false, false, "");
 

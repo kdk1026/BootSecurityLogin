@@ -19,12 +19,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import common.ResponseCodeEnum;
 import common.util.crypto.AesCryptoUtil;
 import common.util.json.JacksonUtil;
 import common.util.properties.PropertiesUtil;
 import common.util.sessioncookie.CookieUtilVer2;
 import kr.co.test.common.Constants;
 import kr.co.test.common.security.web.model.AuthenticatedUser;
+import kr.co.test.model.ResultVo;
 
 /**
  * <pre>
@@ -36,21 +38,20 @@ import kr.co.test.common.security.web.model.AuthenticatedUser;
  *
  * @author 김대광
  */
-public class CookieAuthenticationWebFilter extends OncePerRequestFilter {
-
-	private static final String LOGIN_PAGE = "/cookie/login";
+public class CookieAuthenticationApiFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
+		ResultVo result = new ResultVo();
+
 		// 1. 쿠키에서 로그인 정보 가져오기
 		String sEncryptedUser = CookieUtilVer2.getCookieValue(request, Constants.Auth.LOGIN_COOKIE);
 
 		if ( StringUtils.isEmpty(sEncryptedUser) ) {
-			response.sendRedirect(LOGIN_PAGE);
-			return;
-
+			result.setRes_cd(ResponseCodeEnum.LOGIN_INVALID.getCode());
+			result.setRes_msg(ResponseCodeEnum.LOGIN_INVALID.getMessage());
 		} else {
 			Properties commProp = PropertiesUtil.getPropertiesClasspath("common.properties");
 
@@ -63,13 +64,13 @@ public class CookieAuthenticationWebFilter extends OncePerRequestFilter {
 				dataMap = (LinkedHashMap<String, Object>) JacksonUtil.converterJsonStrToMap(sDecryptedUser);
 
 			} catch (Exception e) {
-				response.sendRedirect(LOGIN_PAGE);
-				return;
+				result.setRes_cd(ResponseCodeEnum.LOGIN_INVALID.getCode());
+				result.setRes_msg(ResponseCodeEnum.LOGIN_INVALID.getMessage());
 			}
 
 			if ( !dataMap.containsKey("id") ) {
-				response.sendRedirect(LOGIN_PAGE);
-				return;
+				result.setRes_cd(ResponseCodeEnum.LOGIN_INVALID.getCode());
+				result.setRes_msg(ResponseCodeEnum.LOGIN_INVALID.getMessage());
 			}
 
 			AuthenticatedUser authUser = new AuthenticatedUser();
