@@ -16,7 +16,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import common.util.sessioncookie.CookieUtilVer2;
 import kr.co.test.common.Constants;
 import kr.co.test.common.security.web.model.AuthenticatedUser;
-import kr.co.test.model.ResultVo;
 import kr.co.test.service.jwt.JwtTokenProvider;
 
 /**
@@ -42,8 +41,6 @@ public class JwtAuthenticationWebFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		ResultVo result = new ResultVo();
-
 
 		// 1. 쿠키에서 토큰 가져오기
 		String sToken = CookieUtilVer2.getCookieValue(request, Constants.Jwt.ACCESS_TOKEN);
@@ -68,25 +65,18 @@ public class JwtAuthenticationWebFilter extends OncePerRequestFilter {
 				break;
 			}
 
-			if ( StringUtils.isEmpty(result.getRes_cd()) ) {
-				// 3. 토큰에서 로그인 정보 추출
-				authUser = jwtTokenProvider.getAuthUserFromJwt(sToken);
+			// 3. 토큰에서 로그인 정보 추출
+			authUser = jwtTokenProvider.getAuthUserFromJwt(sToken);
 
-				UsernamePasswordAuthenticationToken authentication
-					= new UsernamePasswordAuthenticationToken(authUser, null, authUser.getAuthorities());
+			UsernamePasswordAuthenticationToken authentication
+				= new UsernamePasswordAuthenticationToken(authUser, null, authUser.getAuthorities());
 
-				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-			}
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 
-		if ( !StringUtils.isEmpty(result.getRes_cd()) ) {
-			response.sendRedirect(LOGIN_PAGE);
-			return;
-		} else {
-			filterChain.doFilter(request, response);
-		}
+		filterChain.doFilter(request, response);
 	}
 
 }

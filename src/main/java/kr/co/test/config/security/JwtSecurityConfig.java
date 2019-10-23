@@ -100,8 +100,9 @@ public class JwtSecurityConfig {
 				.xssProtection().block(false)
 
 				.and().and()
-				.csrf().disable()
+				.csrf()
 
+				.and()
 				.formLogin().disable()
 				.logout().disable()
 
