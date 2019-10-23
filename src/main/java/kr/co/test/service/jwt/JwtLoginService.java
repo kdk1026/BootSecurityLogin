@@ -61,7 +61,7 @@ public class JwtLoginService extends CommonService {
 		//--------------------------------------------------
 		// 아이디로 계정 정보 조회
 		//--------------------------------------------------
-		String username = paramCollector.getString("id");
+		String username = paramCollector.getString(Constants.Auth.USERNAME);
 
 		AuthenticatedUser user = (AuthenticatedUser) userService.loadUserByUsername(username);
 
@@ -83,23 +83,20 @@ public class JwtLoginService extends CommonService {
 		//--------------------------------------------------
 		// 비밀번호 일치 여부 확인
 		//--------------------------------------------------
-		if ( !BCrypt.checkpw(paramCollector.getString("pw"), user.getPw()) ) {
+		if ( !BCrypt.checkpw(paramCollector.getString(Constants.Auth.PASWORD), user.getPw()) ) {
 			return resultVo;
 		}
 
-		//--------------------------------------------------
-		// JWT 토큰 생성
-		//--------------------------------------------------
 		String sAutoLogin = "N";
 		if ( paramCollector.containsKey("login_chk") && "on".equals(paramCollector.getString("login_chk")) ) {
 			sAutoLogin = "Y";
 		}
 
+		//--------------------------------------------------
+		// JWT 토큰 생성
+		//--------------------------------------------------
 		String sAccessToken = jwtTokenProvider.generateAccessToken(user, "");
 
-		//--------------------------------------------------
-		// JWT 토큰 쿠키 생성
-		//--------------------------------------------------
 		String sSessionExpireSecond = commProp.getProperty("session.expire.second");
 
 		//--------------------------------------------------
@@ -110,6 +107,10 @@ public class JwtLoginService extends CommonService {
 		}
 
 		int nExpireSecond = Integer.parseInt(sSessionExpireSecond);
+
+		//--------------------------------------------------
+		// JWT 토큰 쿠키 생성
+		//--------------------------------------------------
 		CookieUtilVer2.addCookie(response, Constants.Jwt.ACCESS_TOKEN, sAccessToken, nExpireSecond, false, false, "");
 
 		resultVo.setRes_cd(ResponseCodeEnum.SUCCESS.getCode());

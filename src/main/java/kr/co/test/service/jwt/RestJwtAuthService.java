@@ -48,9 +48,9 @@ public class RestJwtAuthService extends LogDeclare {
 	public ResultSetMap processAuthByUsername(ParamCollector paramCollector) {
 		ResultSetMap resMap = new ResultSetMap();
 
-		String sDeviceId = paramCollector.getHeardMap().getString("device_id");
-		String username = paramCollector.getString("username");
-        String password = paramCollector.getString("password");
+		String sDeviceId = paramCollector.getHeardMap().getString(Constants.IsApp.DEVICE_ID_KEY);
+		String username = paramCollector.getString(Constants.Auth.USERNAME);
+        String password = paramCollector.getString(Constants.Auth.PASWORD);
         // XXX : 비밀번호 구간 암호화 시, 복호화 처리
 
 		AuthenticatedUser user = null;
@@ -97,7 +97,7 @@ public class RestJwtAuthService extends LogDeclare {
 	public ResultSetMap processRefresh(ParamCollector paramCollector) {
 		ResultSetMap resMap = new ResultSetMap();
 
-		String sDeviceId = paramCollector.getHeardMap().getString("device_id");
+		String sDeviceId = paramCollector.getHeardMap().getString(Constants.IsApp.DEVICE_ID_KEY);
 		String sGrantType = paramCollector.getString("grant_type");
 		String sRefreshToken = paramCollector.getString("refresh_token");
 
