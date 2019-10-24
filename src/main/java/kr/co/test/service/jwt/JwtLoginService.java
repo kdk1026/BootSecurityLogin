@@ -87,17 +87,20 @@ public class JwtLoginService extends CommonService {
 			return resultVo;
 		}
 
-		String sAutoLogin = "N";
-		if ( paramCollector.containsKey("login_chk") && "on".equals(paramCollector.getString("login_chk")) ) {
-			sAutoLogin = "Y";
-		}
-
 		//--------------------------------------------------
 		// JWT 토큰 생성
 		//--------------------------------------------------
 		String sAccessToken = jwtTokenProvider.generateAccessToken(user, "");
 
+		//--------------------------------------------------
+		// 만료시간 설정
+		//--------------------------------------------------
 		String sSessionExpireSecond = commProp.getProperty("session.expire.second");
+
+		String sAutoLogin = "N";
+		if ( paramCollector.containsKey("login_chk") && "on".equals(paramCollector.getString("login_chk")) ) {
+			sAutoLogin = "Y";
+		}
 
 		//--------------------------------------------------
 		// 자동 로그인 선택 시, 만료기간 7일 설정

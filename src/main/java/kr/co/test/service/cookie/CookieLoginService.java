@@ -74,15 +74,21 @@ public class CookieLoginService extends CommonService {
 			return resultVo;
 		}
 
+		//--------------------------------------------------
+		// 로그인 정보 JSON 문자열로 변환 > AES 암호화
+		//--------------------------------------------------
+		String sJsonUser = JacksonUtil.converterObjToJsonStr(user);
+		String sEncryptedUser = AesCryptoUtil.aesEncrypt(commProp.getProperty("cookie.secret.key"), AesCryptoUtil.AES_CBC_PKCS5PADDING, sJsonUser);
+
+		//--------------------------------------------------
+		// 만료시간 설정
+		//--------------------------------------------------
+		String sSessionExpireSecond = commProp.getProperty("session.expire.second");
+
 		String sAutoLogin = "N";
 		if ( paramCollector.containsKey("login_chk") && "on".equals(paramCollector.getString("login_chk")) ) {
 			sAutoLogin = "Y";
 		}
-
-		String sJsonUser = JacksonUtil.converterObjToJsonStr(user);
-		String sEncryptedUser = AesCryptoUtil.aesEncrypt(commProp.getProperty("cookie.secret.key"), AesCryptoUtil.AES_CBC_PKCS5PADDING, sJsonUser);
-
-		String sSessionExpireSecond = commProp.getProperty("session.expire.second");
 
 		//--------------------------------------------------
 		// 자동 로그인 선택 시, 만료기간 7일 설정
