@@ -45,7 +45,7 @@ spring:
 datasource:
   account:
     driver-class-name: org.h2.Driver
-    url : jdbc:h2:D:\accountdb
+    url : jdbc:h2:D:\accountdb_security
     username: sa
     password:
     type: com.zaxxer.hikari.HikariDataSource
