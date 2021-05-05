@@ -10,9 +10,8 @@ buildscript {
 plugins {
 	id 'java'
 	id 'war'
+	id 'eclipse-wtp'
 }
-
-apply plugin: 'org.springframework.boot'
 
 group = 'kr.co.test'
 version = '0.1'
