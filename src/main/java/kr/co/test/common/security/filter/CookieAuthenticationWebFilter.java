@@ -60,7 +60,7 @@ public class CookieAuthenticationWebFilter extends OncePerRequestFilter {
 			LinkedHashMap<String, Object> dataMap = null;
 
 			try {
-				dataMap = (LinkedHashMap<String, Object>) JacksonUtil.converterJsonStrToMap(sDecryptedUser);
+				dataMap = (LinkedHashMap<String, Object>) JacksonUtil.FromJson.converterJsonStrToMap(sDecryptedUser);
 
 			} catch (Exception e) {
 				response.sendRedirect(LOGIN_PAGE);

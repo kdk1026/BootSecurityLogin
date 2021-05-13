@@ -77,7 +77,7 @@ public class CookieLoginService extends CommonService {
 		//--------------------------------------------------
 		// 로그인 정보 JSON 문자열로 변환 > AES 암호화
 		//--------------------------------------------------
-		String sJsonUser = JacksonUtil.converterObjToJsonStr(user);
+		String sJsonUser = JacksonUtil.ToJson.converterObjToJsonStr(user);
 		String sEncryptedUser = AesCryptoUtil.aesEncrypt(commProp.getProperty("cookie.secret.key"), AesCryptoUtil.AES_CBC_PKCS5PADDING, sJsonUser);
 
 		//--------------------------------------------------

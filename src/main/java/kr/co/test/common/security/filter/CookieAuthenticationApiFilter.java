@@ -61,7 +61,7 @@ public class CookieAuthenticationApiFilter extends OncePerRequestFilter {
 			LinkedHashMap<String, Object> dataMap = null;
 
 			try {
-				dataMap = (LinkedHashMap<String, Object>) JacksonUtil.converterJsonStrToMap(sDecryptedUser);
+				dataMap = (LinkedHashMap<String, Object>) JacksonUtil.FromJson.converterJsonStrToMap(sDecryptedUser);
 
 			} catch (Exception e) {
 				result.setRes_cd(ResponseCodeEnum.LOGIN_INVALID.getCode());
